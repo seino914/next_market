@@ -1,16 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
-import { Params } from "@/app/types/types";
 
-export async function PUT(request: Request, context: { params: Params }) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   const reqBody = await request.json();
-  const params = await context.params;
+  const { id } = await params;
 
   try {
     const { data, error } = await supabase
       .from("items")
       .update(reqBody)
-      .eq("id", params.id)
+      .eq("id", id)
       .select();
 
     if (error) {

@@ -1,15 +1,17 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
-import { Params } from "@/app/types/types";
 
-export async function GET(context: { params: Params }) {
-  const params = await context.params;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
+  const { id } = await params;
 
   try {
     const { data, error } = await supabase
       .from("items")
       .select()
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
 
     if (error) {
