@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
+import { Params } from "@/app/types/types";
 
-export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
-) {
+export async function PUT(request: Request, context: { params: Params }) {
   const reqBody = await request.json();
   const params = await context.params;
 

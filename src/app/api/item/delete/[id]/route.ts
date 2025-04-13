@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
+import { Params } from "@/app/types/types";
 
-export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
-) {
-  const params = await context.params;
+export async function DELETE(request: Request, context: { params: Params }) {
+  const { id } = context.params;
 
   try {
     const { data, error } = await supabase
       .from("items")
       .delete()
-      .eq("id", params.id)
-      .select();
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error) {
       throw error;

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
+import { Params } from "@/app/types/types";
 
-export async function GET(context: { params: { id: string } }) {
+export async function GET(context: { params: Params }) {
   const params = await context.params;
 
   try {
