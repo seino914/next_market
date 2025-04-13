@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
 
-export async function PATCH(
+export async function PUT(
   request: Request,
   context: { params: { id: string } }
 ) {
-  const params = context.params;
   const reqBody = await request.json();
+  const params = await context.params;
 
   try {
     const { data, error } = await supabase

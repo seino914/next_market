@@ -5,7 +5,7 @@ export async function DELETE(
   request: Request,
   context: { params: { id: string } }
 ) {
-  const params = context.params;
+  const params = await context.params;
 
   try {
     const { data, error } = await supabase
