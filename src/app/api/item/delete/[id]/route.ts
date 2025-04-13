@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
 
-export async function POST(request: Request) {
-  const reqBody = await request.json();
+export async function DELETE(
+  request: Request,
+  context: { params: { id: string } }
+) {
+  const params = context.params;
 
   try {
     const { data, error } = await supabase
       .from("items")
-      .insert(reqBody)
+      .delete()
+      .eq("id", params.id)
       .select();
 
     if (error) {
@@ -15,12 +19,12 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      message: "アイテム作成成功",
+      message: "アイテム削除成功",
       data,
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "アイテム作成失敗：" + error },
+      { message: "アイテム削除失敗：" + error },
       { status: 500 }
     );
   }

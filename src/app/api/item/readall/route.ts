@@ -9,10 +9,13 @@ export async function GET() {
       throw error;
     }
 
-    return NextResponse.json({ message: "読み取り成功", data });
+    return NextResponse.json({
+      message: "全てのアイテム読み取り成功",
+      data,
+    });
   } catch (error) {
     return NextResponse.json(
-      { message: "読み取り失敗：" + error },
+      { message: "全てのアイテム読み取り失敗：" + error },
       { status: 500 }
     );
   }

@@ -1,26 +1,30 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
 
-export async function POST(request: Request) {
-  const reqBody = await request.json();
+export async function GET(
+  request: Request,
+  context: { params: { id: string } }
+) {
+  const params = context.params;
 
   try {
     const { data, error } = await supabase
       .from("items")
-      .insert(reqBody)
-      .select();
+      .select()
+      .eq("id", params.id)
+      .single();
 
     if (error) {
       throw error;
     }
 
     return NextResponse.json({
-      message: "アイテム作成成功",
+      message: "アイテム読み取り成功",
       data,
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "アイテム作成失敗：" + error },
+      { message: "アイテム読み取り失敗：" + error },
       { status: 500 }
     );
   }
