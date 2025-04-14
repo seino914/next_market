@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
+import { SignJWT } from "jose";
 
 export async function GET() {
   try {
@@ -33,9 +34,22 @@ export async function POST(request: Request) {
 
     if (!error) {
       if (data.password === reqBody.password) {
+        const secretKey = new TextEncoder().encode(
+          "next-market-route-handlers"
+        );
+
+        const payload = {
+          email: reqBody.email,
+        };
+
+        const token = await new SignJWT(payload)
+          .setProtectedHeader({ alg: "HS256" })
+          .setExpirationTime("1d") // トークン有効期限
+          .sign(secretKey);
+
         return NextResponse.json({
           message: "ログイン成功",
-          data,
+          token,
         });
       } else {
         return NextResponse.json({
