@@ -38,6 +38,23 @@ export async function PUT(
   const { id } = await params;
 
   try {
+    const { data: loginData, error: loginError } = await supabase
+      .from("items")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (loginError) {
+      throw loginError;
+    }
+
+    if (loginData.email !== reqBody.email) {
+      return NextResponse.json(
+        { message: "ユーザーが一致しません" },
+        { status: 401 }
+      );
+    }
+
     const { data, error } = await supabase
       .from("items")
       .update(reqBody)
@@ -64,9 +81,27 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
+  const reqBody = await request.json();
   const { id } = await params;
 
   try {
+    const { data: loginData, error: loginError } = await supabase
+      .from("items")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (loginError) {
+      throw loginError;
+    }
+
+    if (loginData.email !== reqBody.email) {
+      return NextResponse.json(
+        { message: "ユーザーが一致しません" },
+        { status: 401 }
+      );
+    }
+
     const { data, error } = await supabase
       .from("items")
       .delete()
