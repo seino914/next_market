@@ -2,26 +2,6 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/app/utils/database";
 import { SignJWT } from "jose";
 
-export async function GET() {
-  try {
-    const { data, error } = await supabase.from("users").select();
-
-    if (error) {
-      throw error;
-    }
-
-    return NextResponse.json({
-      message: "ユーザー読み取り成功",
-      data,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { message: "ユーザー読み取り失敗：" + error },
-      { status: 500 }
-    );
-  }
-}
-
 export async function POST(request: Request) {
   const reqBody = await request.json();
 
@@ -46,6 +26,8 @@ export async function POST(request: Request) {
           .setProtectedHeader({ alg: "HS256" })
           .setExpirationTime("1d") // トークン有効期限
           .sign(secretKey);
+
+        console.log(token);
 
         return NextResponse.json({
           message: "ログイン成功",
